@@ -1,17 +1,12 @@
-
-
 services:
-
   - type: web
     name: notes-api
     runtime: docker
     rootDir: notes-api
-    plan: starter
     dockerfilePath: ./notes-api/Dockerfile
     dockerCommand: sh ./render-start.sh
     healthCheckPath: /
     envVars:
-
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
@@ -38,11 +33,9 @@ services:
     name: notes-web
     runtime: static
     rootDir: notes-web
-    plan: starter
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     envVars:
-
       - key: VITE_API_URL
         fromService:
           name: notes-api
@@ -51,7 +44,5 @@ services:
 
 databases:
   - name: notes-db
-    plan: free
     postgresMajorVersion: "17"
-
     ipAllowList: []
