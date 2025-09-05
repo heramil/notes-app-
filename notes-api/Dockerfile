@@ -1,19 +1,26 @@
-# notes-api/Dockerfile
-FROM thecodingmachine/php:8.4-v5-cli
+# Multi-stage: install PHP deps with Composer image, then run on lightweight runtime
+FROM composer:2 AS vendor
+WORKDIR /app
 
-WORKDIR /usr/src/app
-
-# Enable the PostgreSQL PDO extension (no apt-get needed)
-ENV PHP_EXTENSIONS="pdo_pgsql"
-
-# Copy app
-COPY . .
-
-# Install dependencies
+# Copy only composer files first (better caching)
+COPY composer.json composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-interaction --no-progress
 
-# Helpful (docs only; Render doesn't rely on EXPOSE)
+# Final runtime image
+FROM thecodingmachine/php:8.4-v5-cli
+WORKDIR /usr/src/app
+
+# Enable required PHP extensions (pdo_pgsql is key for Postgres)
+ENV PHP_EXTENSIONS="pdo_pgsql"
+
+# Copy app code
+COPY . .
+
+# Copy vendor directory from the Composer stage
+COPY --from=vendor /app/vendor ./vendor
+
+# Expose port (Render sets $PORT at runtime)
 EXPOSE 8080
 
-# Start script (we’ll set this in render.yaml, but leaving as default too)
+# Start Laravel via your start script
 CMD ["sh", "-lc", "./render-start.sh"]
