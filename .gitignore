@@ -1,0 +1,22 @@
+# OS/editor
+.DS_Store
+*.swp
+*.log
+
+# Env & secrets (both apps)
+**/.env
+**/.env.*
+
+# Dependencies & builds (both apps)
+**/vendor/
+**/node_modules/
+**/dist/
+
+# Laravel storage/cache (api)
+notes-api/storage/*.key
+notes-api/storage/logs/
+notes-api/storage/framework/
+notes-api/public/storage/
+
+# Vite dev artifacts (web)
+notes-web/.vite/
