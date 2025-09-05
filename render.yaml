@@ -3,7 +3,7 @@ services:
     name: notes-api
     runtime: docker
     rootDir: notes-api
-    dockerfilePath: ./notes-api/Dockerfile
+    dockerfilePath: ./Dockerfile
     dockerCommand: sh ./render-start.sh
     healthCheckPath: /
     envVars:
