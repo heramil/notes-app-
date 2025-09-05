@@ -27,8 +27,6 @@ services:
           type: web
           envVarKey: RENDER_EXTERNAL_URL
 
-    preDeployCommand: php artisan migrate --force --no-interaction
-
   - type: web
     name: notes-web
     runtime: static
